@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+package_dir="$(cd -- "$(dirname -- "$(readlink -f -- "$0")")/.." && pwd)"
+package_version="$(cat "$package_dir/VERSION")"
+runtime_dir="${HWPKIT_LINUX_VENV:-${XDG_DATA_HOME:-$HOME/.local/share}/hwpkit-linux/venv-$package_version}"
+if [[ -x "$runtime_dir/bin/python" ]]; then
+  exec "$runtime_dir/bin/python" -B "$package_dir/app/cli.py" "$@"
+fi
+exec python3 -B "$package_dir/app/cli.py" "$@"
